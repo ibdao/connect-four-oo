@@ -6,6 +6,9 @@ class Game {
     this.width = width;
     this.player = 1;
     this.board = [];
+
+    this.makeHtmlBoard();
+    this.makeBoard();
   }
 
   /** makeBoard: create in-JS board structure:
@@ -26,7 +29,7 @@ class Game {
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
-    top.addEventListener('click', this.handleClick);
+    top.addEventListener('click', this.handleClick.bind(this));
 
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
@@ -68,7 +71,7 @@ class Game {
     piece.classList.add('piece');
     piece.classList.add(`p${this.player}`);
     piece.style.top = -50 * (y + 2);
-  
+
     const spot = document.getElementById(`${y}-${x}`);
     spot.append(piece);
   }
@@ -84,27 +87,27 @@ class Game {
   handleClick(evt) {
     // get x from ID of clicked cell
     const x = +evt.target.id;
-  
+
     // get next spot in column (if none, ignore click)
     const y = this.findSpotForCol(x);
     if (y === null) {
       return;
     }
-  
+
     // place piece in board and add to HTML table
     this.board[y][x] = this.player;
     this.placeInTable(y, x);
-  
+
     // check for win
-    if (this.checkForWin()) {
+    if (this.checkForWin()){
       return this.endGame(`Player ${this.player} won!`);
     }
-  
+
     // check for tie
     if (this.board.every(row => row.every(cell => cell))) {
       return this.endGame('Tie!');
     }
-  
+
     // switch players
     this.player = this.player === 1 ? 2 : 1;
   }
@@ -116,17 +119,17 @@ class Game {
       // Check four cells to see if they're all color of current player
       //  - cells: list of four (y, x) cells
       //  - returns true if all are legal coordinates & all match currPlayer
-  
+
       return cells.every(
         ([y, x]) =>
           y >= 0 &&
           y < this.height &&
           x >= 0 &&
-          x < this.width &&
+          this.width < 7 &&
           this.board[y][x] === this.player
       );
     }
-  
+
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         // get "check list" of 4 cells (starting here) for each of the different
@@ -135,9 +138,9 @@ class Game {
         const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
         const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
         const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
-  
+
         // find winner (only checking each win-possibility as needed)
-        if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+        if (_win.call(this, horiz) || _win.call(this, vert) || _win.call(this, diagDR) || _win.call(this, diagDL)) {
           return true;
         }
       }
@@ -145,7 +148,7 @@ class Game {
   }
 }
 
-let connect4 = new Game(6,7);
+let connect4 = new Game(6, 7);
 
 
 
