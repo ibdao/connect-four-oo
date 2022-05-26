@@ -7,8 +7,9 @@ class Game {
     this.player = 1;
     this.board = [];
 
-    this.makeHtmlBoard();
     this.makeBoard();
+    this.makeHtmlBoard();
+
   }
 
   /** makeBoard: create in-JS board structure:
@@ -148,7 +149,7 @@ class Game {
   }
 }
 
-let connect4 = new Game(6, 7);
+new Game(6,7);
 
 
 
