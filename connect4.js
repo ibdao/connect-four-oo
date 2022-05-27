@@ -1,15 +1,37 @@
 "use strict";
+/** Connect Four
+ *
+ * Player 1 and 2 alternate turns. On each turn, a piece is dropped down a
+ * column until a player gets four-in-a-row (horiz, vert, or diag) or until
+ * board fills (tie)
+ */
+class Player {
+  constructor(color) {
+    this.color = color;
+  }
+}
 
 class Game {
-  constructor(height = 6, width = 7) {
+  constructor(height = 6, width = 7, color1 = "red", color2 = "blue") {
     this.height = height;
     this.width = width;
-    this.player = 1;
     this.board = [];
+    this.player1 = new Player(color1);
+    this.player2 = new Player(color2);
+    this.currPlayer = this.player1;
 
     this.makeBoard();
     this.makeHtmlBoard();
+    this.startBtn = document.createElement("button");
+    this.startBtn.innerHTML = "Start Game";
+    document.body.append(this.startBtn);
+    this.startGame();
 
+  }
+  startGame() {
+    this.startBtn.addEventListener("click", function () {
+      window.location.reload();
+    })
   }
 
   /** makeBoard: create in-JS board structure:
@@ -70,7 +92,7 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${this.player}`);
+    piece.style.backgroundColor = this.currPlayer.color;
     piece.style.top = -50 * (y + 2);
 
     const spot = document.getElementById(`${y}-${x}`);
@@ -96,12 +118,13 @@ class Game {
     }
 
     // place piece in board and add to HTML table
-    this.board[y][x] = this.player;
+    this.board[y][x] = this.currPlayer.color;
     this.placeInTable(y, x);
 
     // check for win
-    if (this.checkForWin()){
-      return this.endGame(`Player ${this.player} won!`);
+    if (this.checkForWin()) {
+      //document.getElementById('column-top').removeEventListener('click', );
+      return this.endGame(`Player ${this.currPlayer.color} won!`);
     }
 
     // check for tie
@@ -110,7 +133,7 @@ class Game {
     }
 
     // switch players
-    this.player = this.player === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === this.player1 ? this.player2 : this.player1;
   }
 
   /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -126,8 +149,8 @@ class Game {
           y >= 0 &&
           y < this.height &&
           x >= 0 &&
-          this.width < 7 &&
-          this.board[y][x] === this.player
+          x < this.width &&
+          this.board[y][x] === this.currPlayer.color
       );
     }
 
@@ -149,7 +172,8 @@ class Game {
   }
 }
 
-new Game(6,7);
+
+new Game(6, 7,"orange", "purple");
 
 
 
