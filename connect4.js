@@ -52,7 +52,8 @@ class Game {
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
-    top.addEventListener('click', this.handleClick.bind(this));
+    let clickHandler = this.handleClick.bind(this)
+    top.addEventListener('click', clickHandler);
 
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
@@ -123,7 +124,7 @@ class Game {
 
     // check for win
     if (this.checkForWin()) {
-      //document.getElementById('column-top').removeEventListener('click', );
+      document.getElementById('column-top').removeEventListener('click', this.clickHandler);
       return this.endGame(`Player ${this.currPlayer.color} won!`);
     }
 
