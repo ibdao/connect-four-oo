@@ -23,11 +23,25 @@ class Game {
     this.player1 = new Player(color1);
     this.player2 = new Player(color2);
     this.currPlayer = this.player1;
+<<<<<<< HEAD
     this.clickHandler = this.handleClick.bind(this)
     this.restartBtn = document.createElement("button");
     this.makeBoard();
     this.restartGame();
     this.makeHtmlBoard();
+=======
+
+
+    this.startBtn = document.createElement("button");
+    this.startBtn.innerHTML = "Start Game";
+    document.body.append(this.startBtn);
+    this.startGame();
+    this.clickHandler = this.handleClick.bind(this);
+    this.makeBoard();
+    this.makeHtmlBoard();
+    console.log(this.clickHandler);
+
+>>>>>>> e9007ccc7cb69d0770e8350fa2b7a38e99f1436f
   }
 
   /** Button that restarts the game (refreshes the page) */
@@ -59,6 +73,12 @@ class Game {
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
+<<<<<<< HEAD
+=======
+
+    // console.log(this.handleClick);
+    console.log(this.clickHandler);
+>>>>>>> e9007ccc7cb69d0770e8350fa2b7a38e99f1436f
     top.addEventListener('click', this.clickHandler);
 
     for (let x = 0; x < this.width; x++) {
