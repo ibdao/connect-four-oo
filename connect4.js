@@ -1,15 +1,19 @@
 "use strict";
+
+/** Creates a Player class based on color */
+
+class Player {
+  constructor(color) {
+    this.color = color;
+  }
+}
+
 /** Connect Four
  *
  * Player 1 and 2 alternate turns. On each turn, a piece is dropped down a
  * column until a player gets four-in-a-row (horiz, vert, or diag) or until
  * board fills (tie)
  */
-class Player {
-  constructor(color) {
-    this.color = color;
-  }
-}
 
 class Game {
   constructor(height = 6, width = 7, color1 = "red", color2 = "blue") {
@@ -19,17 +23,17 @@ class Game {
     this.player1 = new Player(color1);
     this.player2 = new Player(color2);
     this.currPlayer = this.player1;
-
+    this.clickHandler = this.handleClick.bind(this)
+    this.restartBtn = document.createElement("button");
     this.makeBoard();
+    this.restartGame();
     this.makeHtmlBoard();
-    this.startBtn = document.createElement("button");
-    this.startBtn.innerHTML = "Start Game";
-    document.body.append(this.startBtn);
-    this.startGame();
-
   }
-  startGame() {
-    this.startBtn.addEventListener("click", function () {
+
+  /** Button that restarts the game (refreshes the page) */
+
+  restartGame() {
+    this.restartBtn.addEventListener("click", function () {
       window.location.reload();
     })
   }
@@ -47,13 +51,15 @@ class Game {
   /** makeHtmlBoard: make HTML table and row of column tops. */
 
   makeHtmlBoard() {
+    this.restartBtn.innerHTML = "Restart Game";
+    document.body.append(this.restartBtn);
+
     const board = document.getElementById('board');
 
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
-    let clickHandler = this.handleClick.bind(this)
-    top.addEventListener('click', clickHandler);
+    top.addEventListener('click', this.clickHandler);
 
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
@@ -103,7 +109,8 @@ class Game {
   /** endGame: announce game end */
 
   endGame(msg) {
-    alert(msg);
+    alert(msg); 
+    document.getElementById("column-top").removeEventListener('click', this.clickHandler);
   }
 
   /** handleClick: handle click of column top to play piece */
@@ -124,7 +131,6 @@ class Game {
 
     // check for win
     if (this.checkForWin()) {
-      document.getElementById('column-top').removeEventListener('click', this.clickHandler);
       return this.endGame(`Player ${this.currPlayer.color} won!`);
     }
 
@@ -174,7 +180,7 @@ class Game {
 }
 
 
-new Game(6, 7,"orange", "purple");
+new Game(6, 7, "orange", "purple");
 
 
 
