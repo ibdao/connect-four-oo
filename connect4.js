@@ -20,12 +20,15 @@ class Game {
     this.player2 = new Player(color2);
     this.currPlayer = this.player1;
 
-    this.makeBoard();
-    this.makeHtmlBoard();
+
     this.startBtn = document.createElement("button");
     this.startBtn.innerHTML = "Start Game";
     document.body.append(this.startBtn);
     this.startGame();
+    this.clickHandler = this.handleClick.bind(this);
+    this.makeBoard();
+    this.makeHtmlBoard();
+    console.log(this.clickHandler);
 
   }
   startGame() {
@@ -52,8 +55,10 @@ class Game {
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
-    let clickHandler = this.handleClick.bind(this)
-    top.addEventListener('click', clickHandler);
+
+    // console.log(this.handleClick);
+    console.log(this.clickHandler);
+    top.addEventListener('click', this.clickHandler);
 
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
