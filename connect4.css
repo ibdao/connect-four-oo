@@ -24,3 +24,7 @@
 #column-top td:hover {
   background-color: gold;
 }
+button{
+  position: absolute;
+  left: 47%;
+}
